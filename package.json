@@ -1,0 +1,32 @@
+{
+  "name": "joygame",
+  "version": "1.4.0",
+  "description": "An example Parse API server using the parse-server module",
+  "private": true,
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js"
+  },
+  "dependencies": {
+    "@alicloud/sms-sdk": "^1.1.6",
+    "@parse/fs-files-adapter": "^1.2.0",
+    "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
+    "dotenv-safe": "^8.2.0",
+    "express": "~4.17.1",
+    "kerberos": "~1.1.4",
+    "leancloud-storage": "^4.9.0",
+    "moment": "^2.29.1",
+    "parse": "~2.18.0",
+    "parse-dashboard": "^2.1.0",
+    "parse-server": "4.4.0",
+    "parse-zh-email-adapter": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/parse": "^2.18.2",
+    "cross-env": "^7.0.3"
+  },
+  "engines": {
+    "node": ">=12.0"
+  }
+}
