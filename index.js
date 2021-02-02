@@ -38,7 +38,7 @@ const api = new ParseServer({
 const app = express();
 
 // 静态资源目录
-app.use('/public', express.static(path.join(__dirname, '/public')));
+app.use('/public', express.static(path.join(__dirname, '/parse')));
 
 //仪表盘可配置多应用以及访问权限，还可以作为单独的Node项目运行，参考https://github.com/parse-community/parse-dashboard
 const dashboard = new ParseDashboard({
