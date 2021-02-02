@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+
+    <link
+      href="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/theme-chalk/index.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.12/vue.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/element-ui/2.14.1/index.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.0/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/socket.io/2.3.1/socket.io.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/parse/2.19.0/parse.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div>
+        <el-button type="primary" @click="signUp">注册</el-button>
+        <el-button type="primary" @click="logIn">登录</el-button>
+      </div>
+    </div>
+  </body>
+  <script>
+    // https://dashboard.back4app.com/apidocs/eh0U2RtrhpEctTNX489AIFG7LZIwZYZ7AkgC9nBP#user-api
+    // https://www.back4app.com/docs/javascript/javascript-facebook-login
+    // 初始化 parse SDK
+    Parse.serverURL = "https://parseapi.back4app.com"; // This is your Server URL
+    Parse.initialize(
+      "eh0U2RtrhpEctTNX489AIFG7LZIwZYZ7AkgC9nBP", // This is your Application ID
+      "IfoZHar3qZLBi6pWqgyjzIxYFecrZqyQ7vO0JuUt" // This is your Javascript key
+    );
+
+    const NAME = "huanhuan2";
+    const PASS = "admin123";
+
+    // 自定义数据类型
+    const PLAYER_TABLE = "player";
+    class Player extends Parse.Object {
+      constructor() {
+        super(PLAYER_TABLE);
+        this.name = NAME;
+        this.age = 30;
+      }
+    }
+    Parse.Object.registerSubclass(PLAYER_TABLE, Player);
+
+    async function signup() {
+      query = new Parse.Query(Parse.User);
+      query.equalTo("username", NAME); // 可以用 openid作为名字，md5(openid)作为密码
+      query
+        .find()
+        .then((results) => {
+          console.log("found user", results[0].id);
+        })
+        .catch(async (error) => {
+          console.log("user does't exiest, will creating....");
+          await create();
+        });
+    }
+
+    async function create() {
+      // 初始化游戏数据
+      let gameId = "";
+      query = new Parse.Query(PLAYER_TABLE);
+      query.equalTo("name", NAME);
+      query
+        .find()
+        .then((results) => {
+          console.log("player found", results);
+          gameId = results[0].id;
+        })
+        .catch(async (error) => {
+          let info = new Player();
+          const result = await info.save();
+          console.log(result);
+          gameId = result.id;
+        });
+
+      const user = new Parse.User();
+      user.set("username", NAME);
+      user.set("password", PASS);
+      user.set("gameId", gameId);
+
+      user
+        .signUp()
+        .then((user) => {
+          console.log(user);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+
+    async function login() {
+      Parse.User.logIn(NAME, PASS)
+        .then(async(user) => {
+          console.log(user.id, user.getSessionToken(), user.isCurrent());
+          query = new Parse.Query(PLAYER_TABLE);
+          query.equalTo("name", NAME);
+          query
+            .find()
+            .then((results) => {
+              console.log("player found", results[0]);
+            })
+            .catch(async (error) => {
+             console.log("can't find player");
+            });
+        })
+        .catch((error) => {
+          console.log(error.code);
+        });
+    }
+
+    new Vue({
+      el: "#app",
+      data: function () {
+        return {
+          counter: 0,
+        };
+      },
+      methods: {
+        signUp() {
+          signup();
+        },
+        logIn() {
+          login();
+        },
+      },
+    });
+  </script>
+</html>

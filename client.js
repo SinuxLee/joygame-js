@@ -1,5 +1,8 @@
 const parse = require('parse/node')
 
+// https://parseplatform.org/parse-server/api/4.2.0/ParseServerOptions.html
+// https://parseplatform.org/Parse-SDK-JS/api/master/
+
 parse.initialize("joygame","clientKey");
 parse.serverURL = 'http://localhost:1337/parse'
 
@@ -32,7 +35,8 @@ async function launch() {
     const query = new parse.Query(GameInfoTable)
     query.equalTo("owner", user);
     const list = await query.find()
-    if(list.length == 0) {
+    let info;
+    if (list.length === 0) {
         info = new GameInfo()
         info.set("owner", user);
         const result = await info.save()
@@ -66,4 +70,7 @@ parse.User.logIn("libz", "admin123").then(user => {
 }).catch((error) => {
     console.log(error.code);
 })
+
+//  token转user
+// Parse.User.become(token);
 */
