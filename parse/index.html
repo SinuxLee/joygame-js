@@ -13,6 +13,7 @@
     <script src="./js/init.js"></script>
     <script src="./js/player.js"></script>
     <script src="./js/game.js"></script>
+    <script src="./js/cloud.js"></script>
   </head>
 
   <body>
@@ -20,6 +21,8 @@
       <div>
         <el-button type="primary" @click="signUp">注册</el-button>
         <el-button type="primary" @click="logIn">登录</el-button>
+        <el-button type="primary" @click="cloud">云函数</el-button>
+        <el-button type="primary" @click="update">变更</el-button>
       </div>
     </div>
   </body>
@@ -37,6 +40,13 @@
         },
         logIn() {
           login();
+        },
+        async cloud(){
+          let data = await Hello();
+          console.log(data)
+        },
+        update(){
+          change()
         },
       },
     });

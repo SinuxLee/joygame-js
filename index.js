@@ -4,18 +4,22 @@ const ParseServer = require('parse-server').ParseServer;
 const ParseDashboard = require('parse-dashboard');
 const WechatGame = require('./auth/wechatgame')
 
+// 自测 hello world程序在开启4进程pm2 cluster下，qps为5200
+
 // load env var
 require('dotenv-safe').config({
     allowEmptyValues: true,
 });
 
+const SERVER_URL = `${process.env.SERVER_HOST}:${process.env.PORT}${process.env.PARSE_MOUNT}`;
+
 const api = new ParseServer({
     databaseURI: process.env.MONGODB_URI,
     cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
     appId: process.env.APP_ID || 'joygame',
-    javascriptKey: process.env.CLIENT_KEY || '',
+    javascriptKey: process.env.JS_KEY || '',
     masterKey: process.env.MASTER_KEY || '', //master key ，打死也不要告诉别人！
-    serverURL: process.env.SERVER_URL, // 如果使用https不要忘了修改它
+    serverURL: SERVER_URL, // 如果使用https不要忘了修改它
     customPages: 'parseFrameURL',
     liveQuery: {
         classNames: ["Posts", "Comments"] // 配置支持实时请求的class表
@@ -26,7 +30,7 @@ const api = new ParseServer({
             'filesSubDirectory': ''
         }
     },
-    publicServerURL: process.env.SERVER_URL,
+    publicServerURL: SERVER_URL,
     auth: {
         wechatgame: {
             module: WechatGame,
@@ -43,7 +47,7 @@ app.use('/public', express.static(path.join(__dirname, '/parse')));
 //仪表盘可配置多应用以及访问权限，还可以作为单独的Node项目运行，参考https://github.com/parse-community/parse-dashboard
 const dashboard = new ParseDashboard({
     "apps": [{
-        "serverURL": process.env.SERVER_URL,
+        "serverURL": SERVER_URL,
         "appId": process.env.APP_ID || 'myAppId',
         "masterKey": process.env.MASTER_KEY || '',
         "appName": "MyApp"

@@ -1,0 +1,14 @@
+[{
+  "_comment"    : "pm2 start pm2.json",
+  "name"        : "JoyGame",
+  "script"      : "./index.js",
+  "cwd"         : "./",
+  "exec_mode": "cluster",
+  "instances": 4,
+  "error_file" : "app-err.log",
+  "out_file"   : "app-out.log",
+  "env": {
+    "NODE_ENV": "production",
+    "MICRO_CACHE":true
+  }
+}]
