@@ -11,3 +11,7 @@
 * By default it will use a path of /parse for the API routes.  To change this, or use older client SDKs, run `export PARSE_MOUNT=/1` before launching the server.
 * You now have a database named "dev" that contains your Parse data
 * Install ngrok and you can test with devices
+
+### 安全
+- [ ] request body 加密
+- [ ] 防重放校验

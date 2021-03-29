@@ -13,3 +13,6 @@
     "joygame", // This is your Application ID
     "clientKey" // This is your Javascript key
   );
+
+  // 自定义请求头
+  // Parse.CoreManager.set('X-Parse-Session-Token', {'data':'MyPrivateToken'});
